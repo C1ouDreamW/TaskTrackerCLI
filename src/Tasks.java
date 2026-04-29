@@ -55,7 +55,14 @@ class Tasks {
 
     private static Task getTask(String jsonObject) {
         int id = Integer.parseInt(jsonObject.replaceAll(".*\"id\":(\\d+).*", "$1"));
-        String description = jsonObject.replaceAll(".*\"description\":\"([^\"]*)\".*", "$1");
+        String description = jsonObject.replaceAll(".*\"description\":\"((?:\\\\\"|[^\"])*)\".*", "$1");
+        description = description.replace("\\\"", "\"")
+                .replace("\\n", "\n")
+                .replace("\\r", "\r")
+                .replace("\\'", "'")
+                .replace("\\t", "\t")
+                .replace("\\b", "\b")
+                .replace("\\f", "\f");
         Status status = Status.valueOf(jsonObject.replaceAll(".*\"status\":\"([^\"]*)\".*", "$1"));
         String createAt = jsonObject.replaceAll(".*\"createAt\":\"([^\"]*)\".*", "$1");
         String updateAt = jsonObject.replaceAll(".*\"updateAt\":\"([^\"]*)\".*", "$1");

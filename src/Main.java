@@ -97,10 +97,3 @@ public class Main {
         }
     }
 }
-
-enum Status{
-    todo,
-    in_progress,
-    done,
-}
-
