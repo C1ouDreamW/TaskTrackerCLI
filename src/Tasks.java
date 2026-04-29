@@ -36,6 +36,9 @@ class Tasks {
 
     public void init() throws IOException {
         if (Files.exists(this.path)) {
+            if (Files.size(this.path) == 0) {
+                return;
+            }
             String content = Files.readString(this.path);
             // 正则表达式匹配花括号及其内容
             String regex = "\\{[^}]*}";
@@ -53,7 +56,7 @@ class Tasks {
     private static Task getTask(String jsonObject) {
         int id = Integer.parseInt(jsonObject.replaceAll(".*\"id\":(\\d+).*", "$1"));
         String description = jsonObject.replaceAll(".*\"description\":\"([^\"]*)\".*", "$1");
-        String status = jsonObject.replaceAll(".*\"status\":\"([^\"]*)\".*", "$1");
+        Status status = Status.valueOf(jsonObject.replaceAll(".*\"status\":\"([^\"]*)\".*", "$1"));
         String createAt = jsonObject.replaceAll(".*\"createAt\":\"([^\"]*)\".*", "$1");
         String updateAt = jsonObject.replaceAll(".*\"updateAt\":\"([^\"]*)\".*", "$1");
         return new Task(id, description, status, LocalDateTime.parse(createAt), LocalDateTime.parse(updateAt));
@@ -69,7 +72,7 @@ class Tasks {
     public void showAllTasks(String status) {
         System.out.printf("任务列表(%s)：%n", status);
         for (Task i : list) {
-            if (i.getStatus().equals(status)) {
+            if (i.getStatus().toString().equals(status)) {
                 System.out.printf("%d  %s  %s%n", i.getId(), i.getDescription(), i.getStatus());
             }
         }

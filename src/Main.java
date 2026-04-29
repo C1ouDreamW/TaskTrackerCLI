@@ -85,18 +85,7 @@ public class Main {
                     if (matcher.find()) {
                         cmd = matcher.group(1);
                     }
-                    Status status = Status.valueOf(cmd.replace("-", "_"));
-                    switch (status) {
-                        case todo:
-                            taskList.getForId(id).setStatus("todo");
-                            break;
-                        case in_progress:
-                            taskList.getForId(id).setStatus("in_progress");
-                            break;
-                        case done:
-                            taskList.getForId(id).setStatus("done");
-                            break;
-                    }
+                    taskList.getForId(id).setStatus(Status.valueOf(cmd.replace("-", "_")));
                     taskList.getForId(id).setUpdateAt(LocalDateTime.now());
                     System.out.printf("任务%d状态更新成功%n", id);
                     taskList.saveList();
